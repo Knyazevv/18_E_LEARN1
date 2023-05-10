@@ -15,7 +15,7 @@ pipeline  {
             steps {
                 echo 'Creating docker image ...'
                 dir('.'){
-                    sh "docker build -t knyazev88/site . "
+                    sh "docker build --no-cache -t knyazev88/site  . "
                 }
             }
         }
@@ -33,15 +33,15 @@ pipeline  {
             steps {
                 echo " ============== pushing image =================="
                 sh '''
-                docker push macnaer/ss_edup:latest
+                docker push macnaer/website:latest
                 '''
             }
         }
         stage("docker stop") {
             steps {
-                echo " ============== stoping all images =================="
+                echo " ============== stopping all images =================="
                 sh '''
-                docker stop ss_edup
+                docker stop website
                 '''
             }
         } 
@@ -49,15 +49,15 @@ pipeline  {
             steps {
                 echo " ============== removing all docker containers =================="
                 sh '''
-                docker rm ss_edup
+                docker rm  website 
                 '''
             }
         }
         stage("docker run") {
             steps {
-                echo " ============== starting chatterbox server =================="
+                echo " ============== start server =================="
                 sh '''
-                docker run -d --restart=always --name ss_edup -p 80:80 macnaer/ss_edup
+                docker run -d --restart=always --name website -p 80:80 macnaer/website
                 '''
             }
         }
